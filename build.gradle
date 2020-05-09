@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.7.RELEASE")
     }
 }
 
@@ -17,18 +17,32 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
-    baseName = 'springboot-springdata-mongodb'
-    version =  '0.1.0'
+    archiveFileName = 'springboot-springdata-mongodb'
+    version = '0.1.0'
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+
+configurations {
+    compileOnly {
+        //for lombok process 
+        extendsFrom annotationProcessor
+    }
+}
+
 dependencies {
+    //adding local lombok-model dependecy
+    implementation ("com.lpras.lombok.model:lombok-model:1.0.0-SNAPSHOT")
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -36,4 +50,14 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     testCompile("org.springframework.boot:spring-boot-starter-test")
+
+    //mokito
+    /*testCompile 'junit:junit:4.12',
+            'org.powermock:powermock-core:1.6.1',
+            'org.powermock:powermock-module-junit4:1.6.1',
+            'org.powermock:powermock-api-mockito:1.6.1'
+    testCompile(group: 'objenesis', name: 'objenesis', version: '2.1')*/
+    testCompile "org.mockito:mockito-all:1.10.19"
+    testCompile "org.powermock:powermock-mockito-release-full:1.6.4"
+
 }
